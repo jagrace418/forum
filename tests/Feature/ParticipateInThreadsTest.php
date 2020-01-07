@@ -8,7 +8,7 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class ParticipateInForumTest extends TestCase {
+class ParticipateInThreadsTest extends TestCase {
 
 	use DatabaseMigrations;
 
@@ -34,5 +34,17 @@ class ParticipateInForumTest extends TestCase {
 
 		$this->get($thread->path())
 			->assertSee($reply->body);
+	}
+
+	public function test_reply_requires_body () {
+		$this->withExceptionHandling();
+		$this->signIn();
+
+		$thread = create(Thread::class);
+		/** @var Reply $reply */
+		$reply = make(Reply::class, ['body' => null]);
+
+		$this->post($thread->path() . '/replies', $reply->toArray())
+			->assertSessionHasErrors('body');
 	}
 }
