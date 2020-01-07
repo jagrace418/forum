@@ -29,8 +29,7 @@ class ReadThreadsTest extends TestCase {
 			->create(['thread_id' => $this->thread->id]);
 
 		$this->get($this->thread->path())
-			->assertSee($reply->body)
-			->assertSee($reply->owner->name);
+			->assertSee($reply->body);
 
 	}
 
