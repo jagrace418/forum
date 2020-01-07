@@ -16,19 +16,19 @@ class ParticipateInForumTest extends TestCase {
 	public function test_unauth_user_may_not_add_replies () {
 		$this->expectException(AuthenticationException::class);
 
-		$thread = factory(Thread::class)->create();
+		$thread = create(Thread::class);
 
-		$reply = factory(Reply::class)->create();
+		$reply = create(Reply::class);
 
 		$this->post($thread->path() . '/replies', $reply->toArray());
 	}
 
 	public function test_auth_user_may_participate_in_thread () {
-		$this->be($user = factory(User::class)->create());
+		$this->be($user = create(User::class));
 
-		$thread = factory(Thread::class)->create();
+		$thread = create(Thread::class);
 
-		$reply = factory(Reply::class)->make();
+		$reply = make(Reply::class);
 
 		$this->post($thread->path() . '/replies', $reply->toArray());
 
