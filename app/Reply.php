@@ -2,28 +2,33 @@
 
 namespace App;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Reply
- * @property int                             $id
- * @property int                             $user_id
- * @property int                             $thread_id
- * @property string                          $body
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Reply newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Reply newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Reply query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Reply whereBody($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Reply whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Reply whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Reply whereThreadId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Reply whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Reply whereUserId($value)
- * @mixin \Eloquent
+ * @property int         $id
+ * @property int         $user_id
+ * @property int         $thread_id
+ * @property string      $body
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|Reply newModelQuery()
+ * @method static Builder|Reply newQuery()
+ * @method static Builder|Reply query()
+ * @method static Builder|Reply whereBody($value)
+ * @method static Builder|Reply whereCreatedAt($value)
+ * @method static Builder|Reply whereId($value)
+ * @method static Builder|Reply whereThreadId($value)
+ * @method static Builder|Reply whereUpdatedAt($value)
+ * @method static Builder|Reply whereUserId($value)
+ * @mixin Eloquent
  */
-class Reply extends Model
-{
-    //
+class Reply extends Model {
+
+	public function owner () {
+		return $this->belongsTo(User::class, 'user_id');
+	}
 }
