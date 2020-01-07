@@ -14,7 +14,7 @@ class ThreadsController extends Controller {
 
 	public function __construct () {
 		$this->middleware('auth')
-			->only('store');
+			->except(['show', 'index']);
 	}
 
 	/**
@@ -29,10 +29,10 @@ class ThreadsController extends Controller {
 
 	/**
 	 * Show the form for creating a new resource.
-	 * @return Response
+	 * @return Factory|View
 	 */
 	public function create () {
-		//
+		return view('threads.create');
 	}
 
 	/**
