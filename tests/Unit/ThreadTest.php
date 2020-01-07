@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Channel;
 use App\Thread;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,6 +15,11 @@ class ThreadTest extends TestCase {
 
 	private $thread;
 
+	protected function setUp (): void {
+		parent::setUp();
+		$this->thread = factory(Thread::class)->create();
+	}
+
 	public function test_thread_has_replies () {
 
 		self::assertInstanceOf(Collection::class, $this->thread->replies);
@@ -21,6 +27,17 @@ class ThreadTest extends TestCase {
 
 	public function test_thread_has_creator () {
 		self::assertInstanceOf(User::class, $this->thread->creator);
+	}
+
+	public function test_thread_has_string_path () {
+		$thread = create(Thread::class);
+
+		self::assertEquals($thread->path(), "/threads/{$thread->channel->slug}/{$thread->id}");
+	}
+
+	public function test_thread_belongs_to_channel () {
+		$thread = create(Thread::class);
+		self::assertInstanceOf(Channel::class, $thread->channel);
 	}
 
 	public function test_thread_can_add_replies () {
@@ -32,8 +49,4 @@ class ThreadTest extends TestCase {
 		self::assertCount(1, $this->thread->replies);
 	}
 
-	protected function setUp (): void {
-		parent::setUp();
-		$this->thread = factory(Thread::class)->create();
-	}
 }

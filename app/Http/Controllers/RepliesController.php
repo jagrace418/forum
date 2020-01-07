@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Channel;
 use App\Thread;
+use Illuminate\Http\RedirectResponse;
 
 class RepliesController extends Controller {
 
@@ -10,7 +12,13 @@ class RepliesController extends Controller {
 		$this->middleware('auth');
 	}
 
-	public function store (Thread $thread) {
+	/**
+	 * @param Channel $channel
+	 * @param Thread  $thread
+	 *
+	 * @return RedirectResponse
+	 */
+	public function store (Channel $channel, Thread $thread) {
 		$thread->addReply([
 			'body'    => request('body'),
 			'user_id' => auth()->id(),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Channel;
 use App\Thread;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -44,9 +45,10 @@ class ThreadsController extends Controller {
 	 */
 	public function store (Request $request) {
 		$thread = Thread::create([
-			'user_id' => auth()->id(),
-			'title'   => request('title'),
-			'body'    => request('body'),
+			'user_id'    => auth()->id(),
+			'channel_id' => request('channel_id'),
+			'title'      => request('title'),
+			'body'       => request('body'),
 		]);
 
 		return redirect($thread->path());
@@ -55,11 +57,12 @@ class ThreadsController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param Thread $thread
+	 * @param Channel $channel
+	 * @param Thread  $thread
 	 *
 	 * @return Factory|View
 	 */
-	public function show (Thread $thread) {
+	public function show (Channel $channel, Thread $thread) {
 		return view('threads.show', compact('thread'));
 	}
 

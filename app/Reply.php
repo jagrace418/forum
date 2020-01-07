@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Reply whereUpdatedAt($value)
  * @method static Builder|Reply whereUserId($value)
  * @mixin Eloquent
+ * @property-read User   $owner
  */
 class Reply extends Model {
 
