@@ -13,6 +13,9 @@ class ReadThreadsTest extends TestCase {
 
 	use DatabaseMigrations;
 
+	/**
+	 * @var Thread
+	 */
 	private $thread;
 
 	protected function setUp (): void {
@@ -59,6 +62,24 @@ class ReadThreadsTest extends TestCase {
 		$this->get('/threads?by=Jake')
 			->assertSee($jakeThread->title)
 			->assertDontSee($notJakeThread);
+	}
+
+	public function test_user_can_filter_threads_by_popular () {
+		/** @var Thread $threadTwoReplies */
+		$threadTwoReplies = create(Thread::class);
+		create(Reply::class, ['thread_id' => $threadTwoReplies->id], 2);
+		/** @var Thread $threadThreeReplies */
+		$threadThreeReplies = create(Thread::class);
+		create(Reply::class, ['thread_id' => $threadThreeReplies->id], 3);
+
+		$response = $this->get('threads?popularity=1');
+
+		$response->assertSeeInOrder([
+			$threadThreeReplies->title,
+			$threadTwoReplies->title,
+			$this->thread->title
+		]);
+
 	}
 
 }
