@@ -5,6 +5,7 @@ namespace App;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -29,8 +30,14 @@ use Illuminate\Support\Carbon;
  */
 class Reply extends Model {
 
+	/**
+	 * @var array
+	 */
 	protected $guarded = [];
 
+	/**
+	 * @return BelongsTo
+	 */
 	public function owner () {
 		return $this->belongsTo(User::class, 'user_id');
 	}

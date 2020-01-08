@@ -2,20 +2,23 @@
 
 namespace App;
 
+use App\Filters\ThreadFilters;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
  * App\Thread
- * @property int                     $id
- * @property int                     $user_id
- * @property string                  $title
- * @property string                  $body
- * @property Carbon|null             $created_at
- * @property Carbon|null             $updated_at
+ * @property int         $id
+ * @property int         $user_id
+ * @property string      $title
+ * @property string      $body
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @method static Builder|Thread newModelQuery()
  * @method static Builder|Thread newQuery()
  * @method static Builder|Thread query()
@@ -35,25 +38,54 @@ use Illuminate\Support\Carbon;
  */
 class Thread extends Model {
 
+	/**
+	 * Don't auto-apply mass assignment protection
+	 * @var array
+	 */
 	protected $guarded = [];
 
+	/**
+	 * @return string
+	 */
 	public function path () {
 		return "/threads/{$this->channel->slug}/{$this->id}";
 	}
 
+	/**
+	 * @return BelongsTo
+	 */
 	public function creator () {
 		return $this->belongsTo(User::class, 'user_id');
 	}
 
+	/**
+	 * @return BelongsTo
+	 */
 	public function channel () {
 		return $this->belongsTo(Channel::class);
 	}
 
+	/**
+	 * @param $reply
+	 */
 	public function addReply ($reply) {
 		$this->replies()->create($reply);
 	}
 
+	/**
+	 * @return HasMany
+	 */
 	public function replies () {
 		return $this->hasMany(Reply::class);
+	}
+
+	/**
+	 * @param Builder       $query
+	 * @param ThreadFilters $filters
+	 *
+	 * @return Builder
+	 */
+	public function scopeFilter ($query, ThreadFilters $filters) {
+		return $filters->apply($query);
 	}
 }
