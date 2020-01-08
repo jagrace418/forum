@@ -6,9 +6,9 @@
 
 @section('content')
 	<div class="container">
-		<div class="row justify-content-center">
+		<div class="row">
 			<div class="col-md-8">
-				<div class="card">
+				<div class="card mb-2">
 					<div class="card-header">
 						<a href="#">
 							{{$thread->creator->name}}
@@ -20,20 +20,14 @@
 						{{$thread->body}}
 					</div>
 				</div>
-			</div>
-		</div>
 
-		<div class="row justify-content-center">
-			<div class="col-md-8">
-				@foreach($thread->replies as $reply)
+				@foreach($replies as $reply)
 					@include('threads.reply')
 				@endforeach
-			</div>
-		</div>
 
-		@auth()
-			<div class="row justify-content-center">
-				<div class="col-md-8">
+				{{$replies->links()}}
+
+				@auth()
 					<form method="POST" action="{{$thread->path() . '/replies'}}">
 						@csrf
 						<div class="form-group">
@@ -42,11 +36,27 @@
 						</div>
 						<button type="submit" class="btn btn-default">Post</button>
 					</form>
+				@endauth
+				@guest()
+					<a class="text-center" href="{{route('login')}}">Please sign-in to participate</a>
+				@endguest
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<p>
+							This thread was published
+							{{$thread->created_at->diffForHumans()}} by
+							<a href="#">
+								{{$thread->creator->name}}
+							</a>
+							and currently has
+							{{$thread->replies_count}}
+							{{Str::plural('comment', $thread->replies_count)}}.
+						</p>
+					</div>
 				</div>
 			</div>
-		@endauth
-		@guest()
-			<a class="text-center" href="{{route('login')}}">Please sign-in to participate</a>
-		@endguest
+		</div>
 	</div>
 @endsection
