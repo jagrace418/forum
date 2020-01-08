@@ -34,7 +34,7 @@
 							<textarea name="body" id="body" class="form-control" placeholder="Say something"
 									  rows="5"></textarea>
 						</div>
-						<button type="submit" class="btn btn-default">Post</button>
+						<button type="submit" class="btn btn-outline-dark">Post</button>
 					</form>
 				@endauth
 				@guest()

@@ -13,12 +13,12 @@ use Illuminate\Support\Carbon;
 
 /**
  * App\Thread
- * @property int         $id
- * @property int         $user_id
- * @property string      $title
- * @property string      $body
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property int                     $id
+ * @property int                     $user_id
+ * @property string                  $title
+ * @property string                  $body
+ * @property Carbon|null             $created_at
+ * @property Carbon|null             $updated_at
  * @method static Builder|Thread newModelQuery()
  * @method static Builder|Thread newQuery()
  * @method static Builder|Thread query()
@@ -43,6 +43,8 @@ class Thread extends Model {
 	 * @var array
 	 */
 	protected $guarded = [];
+
+	protected $with = ['creator', 'channel'];
 
 	protected static function boot () {
 		parent::boot();
@@ -83,7 +85,9 @@ class Thread extends Model {
 	 * @return HasMany
 	 */
 	public function replies () {
-		return $this->hasMany(Reply::class);
+		return $this->hasMany(Reply::class)
+			->withCount('favorites')
+			->with('owner');
 	}
 
 	/**

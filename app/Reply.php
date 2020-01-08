@@ -30,10 +30,17 @@ use Illuminate\Support\Carbon;
  */
 class Reply extends Model {
 
+	use Favoritable;
 	/**
 	 * @var array
 	 */
 	protected $guarded = [];
+
+	/**
+	 * Any time we query this, also eager load these
+	 * @var array
+	 */
+	protected $with = ['owner', 'favorites'];
 
 	/**
 	 * @return BelongsTo
@@ -42,17 +49,4 @@ class Reply extends Model {
 		return $this->belongsTo(User::class, 'user_id');
 	}
 
-	public function favorites () {
-		return $this->morphMany(Favorite::class, 'favorited');
-	}
-
-	public function favorite () {
-		if (!$this->favorites()->where([
-			'user_id' => auth()->id()
-		])->exists()) {
-			$this->favorites()->create([
-				'user_id' => auth()->id()
-			]);
-		}
-	}
 }
