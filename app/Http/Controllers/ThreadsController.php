@@ -21,10 +21,18 @@ class ThreadsController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
+	 *
+	 * @param Channel|null $channel
+	 *
 	 * @return Factory|View
 	 */
-	public function index () {
-		$threads = Thread::latest()->get();
+	public function index (Channel $channel = null) {
+		if ($channel->exists) {
+			$threads = Thread::where('channel_id', $channel->id)->latest()->get();
+		} else {
+			$threads = Thread::latest()->get();
+		}
+
 
 		return view('threads.index', compact('threads'));
 	}
