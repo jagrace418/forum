@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Thread;
+use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -110,12 +111,19 @@ class ThreadsController extends Controller {
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param Thread $thread
+	 * @param Channel $channel
+	 * @param Thread  $thread
 	 *
-	 * @return Response
+	 * @return RedirectResponse|Redirector
+	 * @throws Exception
 	 */
-	public function destroy (Thread $thread) {
-		//
+	public function destroy (Channel $channel, Thread $thread) {
+		$thread->delete();
+		if (request()->wantsJson()) {
+			return response([], 204);
+		}
+
+		return redirect('/threads');
 	}
 
 	public function getThreads (Channel $channel, ThreadFilters $filters) {

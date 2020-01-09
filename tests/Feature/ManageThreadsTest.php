@@ -3,11 +3,12 @@
 namespace Tests\Feature;
 
 use App\Channel;
+use App\Reply;
 use App\Thread;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class CreateThreadsTest extends TestCase {
+class ManageThreadsTest extends TestCase {
 
 	use DatabaseMigrations;
 
@@ -61,5 +62,33 @@ class CreateThreadsTest extends TestCase {
 
 		$this->publishThread(['channel_id' => 9999])
 			->assertSessionHasErrors('channel_id');
+	}
+
+	public function test_auth_user_can_delete_thread () {
+		$this->signIn();
+		/** @var Thread $thread */
+		$thread = create(Thread::class);
+		/** @var Reply $reply */
+		$reply = create(Reply::class, ['thread_id' => $thread->id]);
+		$this->deleteJson($thread->path())
+			->assertStatus(204);
+		$this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+		//make sure the replies are also deleted
+		$this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+	}
+
+	public function test_unauth_user_cannot_delete_thread () {
+		/** @var Thread $thread */
+		$thread = create(Thread::class);
+		/** @var Reply $reply */
+		$reply = create(Reply::class, ['thread_id' => $thread->id]);
+		$this->delete($thread->path())
+			->assertRedirect('/login');
+		$this->assertDatabaseHas('threads', ['id' => $thread->id]);
+		$this->assertDatabaseHas('replies', ['id' => $reply->id]);
+	}
+
+	public function test_threads_can_only_be_deleted_by_those_with_perms () {
+
 	}
 }
