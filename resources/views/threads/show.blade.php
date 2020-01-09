@@ -17,12 +17,13 @@
 								</a>
 								posted: {{$thread->title}}
 							</span>
-							<form action="{{$thread->path()}}" method="POST">
-								@csrf
-								@method('DELETE')
-								<button type="submit" class="btn btn-outline-dark">Delete</button>
-							</form>
-
+							@can('update', $thread)
+								<form action="{{$thread->path()}}" method="POST">
+									@csrf
+									@method('DELETE')
+									<button type="submit" class="btn btn-outline-dark">Delete</button>
+								</form>
+							@endcan
 						</div>
 					</div>
 					<div class="card-body">

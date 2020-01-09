@@ -67,9 +67,9 @@ class ManageThreadsTest extends TestCase {
 	public function test_auth_user_can_delete_thread () {
 		$this->signIn();
 		/** @var Thread $thread */
-		$thread = create(Thread::class);
+		$thread = create(Thread::class, ['user_id' => auth()->id()]);
 		/** @var Reply $reply */
-		$reply = create(Reply::class, ['thread_id' => $thread->id]);
+		$reply = create(Reply::class, ['thread_id' => $thread->id, 'user_id' => auth()->id()]);
 		$this->deleteJson($thread->path())
 			->assertStatus(204);
 		$this->assertDatabaseMissing('threads', ['id' => $thread->id]);
@@ -86,9 +86,12 @@ class ManageThreadsTest extends TestCase {
 			->assertRedirect('/login');
 		$this->assertDatabaseHas('threads', ['id' => $thread->id]);
 		$this->assertDatabaseHas('replies', ['id' => $reply->id]);
-	}
 
-	public function test_threads_can_only_be_deleted_by_those_with_perms () {
-
+		//try it when the thread doesn't belong to signed in user
+		$this->signIn();
+		$this->delete($thread->path())
+			->assertStatus(403);
+		$this->assertDatabaseHas('threads', ['id' => $thread->id]);
+		$this->assertDatabaseHas('replies', ['id' => $reply->id]);
 	}
 }
