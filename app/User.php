@@ -5,6 +5,7 @@ namespace App;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -66,11 +67,24 @@ class User extends Authenticatable {
 		'email_verified_at' => 'datetime',
 	];
 
+	/**
+	 * @return string
+	 */
 	public function getRouteKeyName () {
 		return 'name';
 	}
 
+	/**
+	 * @return HasMany
+	 */
 	public function threads () {
 		return $this->hasMany(Thread::class);
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function activity () {
+		return $this->hasMany(Activity::class);
 	}
 }
