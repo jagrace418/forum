@@ -75,6 +75,15 @@ class ManageThreadsTest extends TestCase {
 		$this->assertDatabaseMissing('threads', ['id' => $thread->id]);
 		//make sure the replies are also deleted
 		$this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+		//make sure the activity is also deleted
+		$this->assertDatabaseMissing('activities', [
+			'subject_id'   => $thread->id,
+			'subject_type' => Thread::class
+		]);
+		$this->assertDatabaseMissing('activities', [
+			'subject_id'   => $reply->id,
+			'subject_type' => Reply::class
+		]);
 	}
 
 	public function test_unauth_user_cannot_delete_thread () {
