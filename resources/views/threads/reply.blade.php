@@ -1,7 +1,7 @@
 <?php
 /** @var \App\Reply $reply */
 ?>
-<div class="card mb-2">
+<div id="reply-{{$reply->id}}" class="card mb-2">
 	<div class="card-header">
 		<div class="level">
 			<h5 class="flex">
