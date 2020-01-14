@@ -25,6 +25,9 @@
 				@empty
 					<p>There are no threads in this channel right now</p>
 				@endforelse
+				@if($threads)
+					{{$threads->links()}}
+				@endif
 			</div>
 		</div>
 	</div>
