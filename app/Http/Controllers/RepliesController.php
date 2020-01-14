@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
+use App\Reply;
 use App\Thread;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\ValidationException;
 
@@ -32,5 +35,31 @@ class RepliesController extends Controller {
 
 		return back()
 			->with('flash', 'Your reply has been left.');
+	}
+
+	/**
+	 * @param Reply $reply
+	 *
+	 * @return RedirectResponse
+	 * @throws AuthorizationException
+	 * @throws Exception
+	 */
+	public function destroy (Reply $reply) {
+		$this->authorize('update', $reply);
+
+		$reply->delete();
+
+		return back();
+	}
+
+	/**
+	 * @param Reply $reply
+	 *
+	 * @throws AuthorizationException
+	 */
+	public function update (Reply $reply) {
+		$this->authorize('update', $reply);
+
+		$reply->update(request(['body']));
 	}
 }

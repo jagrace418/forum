@@ -13,13 +13,14 @@ window.Vue = require('vue');
  * Vue components. It will recursively scan this directory for the Vue
  * components and automatically register them with their "basename".
  *
- * Eg. ./components/FlashComponent.vue -> <example-component></example-component>
+ * Eg. ./components/Flash.vue -> <example-component></example-component>
  */
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('flash-component', require('./components/FlashComponent.vue').default);
+Vue.component('flash', require('./components/Flash.vue').default);
+Vue.component('reply', require('./components/Reply.vue').default);
 
 window.events = new Vue();
 //global flash method

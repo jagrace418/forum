@@ -31,6 +31,10 @@
 		.flex {
 			flex: 1;
 		}
+
+		[v-cloak] {
+			display: none
+		}
 	</style>
 </head>
 <body>
@@ -41,7 +45,7 @@
 	<main class="py-4">
 		@yield('content')
 	</main>
-	<flash-component message="{{session('flash')}}"></flash-component>
+	<flash message="{{session('flash')}}"></flash>
 </div>
 </body>
 </html>
