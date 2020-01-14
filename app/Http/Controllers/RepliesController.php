@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Channel;
 use App\Reply;
 use App\Thread;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\ValidationException;
 
@@ -40,14 +40,17 @@ class RepliesController extends Controller {
 	/**
 	 * @param Reply $reply
 	 *
-	 * @return RedirectResponse
+	 * @return ResponseFactory|RedirectResponse|\Illuminate\Http\Response
 	 * @throws AuthorizationException
-	 * @throws Exception
 	 */
 	public function destroy (Reply $reply) {
 		$this->authorize('update', $reply);
 
 		$reply->delete();
+
+		if (request()->expectsJson()) {
+			return \response([], 204);
+		}
 
 		return back();
 	}

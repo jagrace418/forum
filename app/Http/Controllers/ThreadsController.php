@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Thread;
-use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -17,6 +18,9 @@ use Illuminate\View\View;
 
 class ThreadsController extends Controller {
 
+	/**
+	 * ThreadsController constructor.
+	 */
 	public function __construct () {
 		$this->middleware('auth')
 			->except(['show', 'index']);
@@ -110,13 +114,11 @@ class ThreadsController extends Controller {
 	}
 
 	/**
-	 * Remove the specified resource from storage.
-	 *
 	 * @param Channel $channel
 	 * @param Thread  $thread
 	 *
-	 * @return RedirectResponse|Redirector
-	 * @throws Exception
+	 * @return ResponseFactory|RedirectResponse|Response|Redirector
+	 * @throws AuthorizationException
 	 */
 	public function destroy (Channel $channel, Thread $thread) {
 

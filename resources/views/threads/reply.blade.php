@@ -13,22 +13,10 @@
 				</h5>
 				@can('update', $reply)
 					<button class="btn btn-outline-dark" @click="editing = true">Edit</button>
-					<form action="{{$reply->path()}}" method="POST">
-						@csrf
-						@method('DELETE')
-						<button type="submit" class="btn btn-outline-dark">Delete</button>
-					</form>
+					<button class="btn btn-outline-dark" @click="destroy">Delete</button>
 				@endcan
+				<favorite :reply="{{$reply}}"></favorite>
 			</div>
-			<div>
-				<form method="POST" action="/replies/{{$reply->id}}/favorites">
-					@csrf
-					<button type="submit" class="btn btn-outline-dark" {{$reply->isFavorited() ? 'disabled' : ''}}>
-						{{$reply->favorites_count}} {{Str::plural('Favorite', $reply->favorites_count)}}
-					</button>
-				</form>
-			</div>
-
 		</div>
 		<div class="card-body">
 			<div v-if="editing">

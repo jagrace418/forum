@@ -41,6 +41,11 @@ class Reply extends Model {
 	protected $guarded = [];
 
 	/**
+	 * @var array
+	 */
+	protected $appends = ['favoritesCount', 'isFavorited'];
+
+	/**
 	 * Any time we query this, also eager load these
 	 * @var array
 	 */
@@ -53,10 +58,16 @@ class Reply extends Model {
 		return $this->belongsTo(User::class, 'user_id');
 	}
 
+	/**
+	 * @return BelongsTo
+	 */
 	public function thread () {
 		return $this->belongsTo(Thread::class);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function path () {
 		return $this->thread->path() . "#reply-" . $this->id;
 	}
