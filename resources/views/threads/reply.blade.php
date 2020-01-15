@@ -15,7 +15,11 @@
 					<button class="btn btn-outline-dark" @click="editing = true">Edit</button>
 					<button class="btn btn-outline-dark" @click="destroy">Delete</button>
 				@endcan
-				<favorite :reply="{{$reply}}"></favorite>
+				@if(Auth::check())
+					<div>
+						<favorite :reply="{{$reply}}"></favorite>
+					</div>
+				@endif
 			</div>
 		</div>
 		<div class="card-body">

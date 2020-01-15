@@ -46,6 +46,7 @@ class ThreadsController extends Controller {
 	 * @return Factory|View
 	 */
 	public function create () {
+
 		return view('threads.create');
 	}
 

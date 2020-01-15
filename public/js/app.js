@@ -1976,12 +1976,12 @@
                     return this.isFavorited ? this.destroy() : this.create();
                 },
                 create: function create() {
-                    axios.post(this.url());
+                    axios.post(this.url);
                     this.isFavorited = true;
                     this.favoritesCount++;
                 },
                 destroy: function destroy() {
-                    axios["delete"](this.url());
+                    axios["delete"](this.url);
                     this.isFavorited = false;
                     this.favoritesCount--;
                 }
